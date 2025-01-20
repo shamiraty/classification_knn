@@ -12,20 +12,23 @@ st.title("KNN ALGORITHM AND PREDICTION WITH CSV DATA")
 # Main objective
 st.subheader("Main Objective")
 st.markdown("""
-- **The main objective of this project** is to implement the K-Nearest Neighbors (KNN) algorithm to predict future customer types based on features like Age and Income.
-- The model will be trained using data stored in a CSV file, which is collected from observations conducted in research. The data includes customer details like Age, Income, and Customer Type.
-- Once trained, the model will allow predictions to be made on new customer records, and the predicted customer type can be used for future reference and analysis.
+- **The main objective of this project** is to implement the K-Nearest Neighbors (KNN) algorithm to segment customers into distinct tiers (VIP, Regular, Gold, Premium) based on their predicted behavior. This segmentation will enable targeted service delivery, such as SMS notifications, tailored to each tier.
+- The model will be trained using historical customer data (e.g., purchase history, website activity, engagement metrics) stored in a MySQL database. This data will be used to identify patterns and predict future customer behavior.
+- The trained KNN model will then be used to classify new and existing customers into the appropriate tiers (VIP, Regular, Gold, Premium). This classification will facilitate personalized services and communication strategies.
 
 ___
-### Simple Analytics
+### Simple Analytics and Tier-Specific Insights
 
-- **Customer Type Analysis**: The project also provides an analysis of the customer dataset, focusing on key metrics such as:
-    - **Customer Type Count**: The total count of customers in each customer type category, showing the distribution of customer types.
-    - **Age Insights**: Key statistics on age, including the maximum age, minimum age, and age range within each customer type, along with the standard deviation (age variation) to understand how much the ages vary.
-    - **Overall Customer Insights**: Basic statistics about the entire dataset, including the total number of unique customers, the maximum and minimum ages, and the overall age range.
+- **Customer Tier Analysis**: The project provides an analysis of the customer dataset, focusing on key metrics within each tier:
+    - **Tier Distribution**: The number of customers assigned to each tier (VIP, Regular, Gold, Premium), providing an overview of the customer base composition.
+    - **Behavioral Insights**: Analysis of key behavioral metrics (e.g., average purchase value, frequency of purchases, website visits) within each tier. This helps understand the characteristics of each customer segment.
+    - **Demographic Insights (If Available):** If demographic data (e.g., age, location) is available, analysis of these features within each tier can provide further insights into customer demographics.
 
-These analytics provide valuable insights into the dataset, helping to interpret the distribution of customer types and better understand the underlying patterns based on age and income.
+- **Overall Customer Insights**: Basic statistics about the entire dataset, including the total number of unique customers and overall distribution of behavioral metrics.
+
+These analytics provide valuable insights into customer segmentation, enabling targeted service delivery and personalized experiences based on predicted customer behavior and tier assignment.
 """)
+
 
 # Load CSV file
 @st.cache_data
