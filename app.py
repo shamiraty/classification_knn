@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import mysql.connector
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score
@@ -8,14 +7,14 @@ from numerize import numerize
 
 # Streamlit app setup
 st.set_page_config(layout="wide")
-st.title("KNN ALGORITHM AND PREDICTION WITH MYSQL")
+st.title("KNN ALGORITHM AND PREDICTION WITH CSV DATA")
 
 # Main objective
 st.subheader("Main Objective")
 st.markdown("""
 - **The main objective of this project** is to implement the K-Nearest Neighbors (KNN) algorithm to predict future customer types based on features like Age and Income.
-- The model will be trained using data stored in a MySQL database, which is collected from observations conducted in research. The data includes customer details like Age, Income, and Customer Type.
-- Once trained, the model will allow predictions to be made on new customer records, and the predicted customer type will be saved back into the MySQL database for future reference and analysis.
+- The model will be trained using data stored in a CSV file, which is collected from observations conducted in research. The data includes customer details like Age, Income, and Customer Type.
+- Once trained, the model will allow predictions to be made on new customer records, and the predicted customer type can be used for future reference and analysis.
 
 ___
 ### Simple Analytics
@@ -28,36 +27,14 @@ ___
 These analytics provide valuable insights into the dataset, helping to interpret the distribution of customer types and better understand the underlying patterns based on age and income.
 """)
 
-# MySQL connection setup
-def get_mysql_connection():
-    return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="",
-        database="knn"
-    )
+# Load CSV file
+@st.cache_data
+def load_csv_data(file_path):
+    return pd.read_csv(file_path)
 
-# Read data from MySQL database
-def read_data_from_database():
-    connection = get_mysql_connection()
-    query = "SELECT Age, Income, Customer_Type FROM large_customer_data"
-    df = pd.read_sql(query, connection)
-    connection.close()
-    return df
-
-# Save new prediction to the database
-def save_prediction_to_database(age, income, predicted_value):
-    connection = get_mysql_connection()
-    cursor = connection.cursor()
-    query = "INSERT INTO large_customer_data (Age, Income, Customer_Type) VALUES (%s, %s, %s)"
-    cursor.execute(query, (age, income, predicted_value))
-    connection.commit()
-    connection.close()
-
-# Read the data from the database
-df = read_data_from_database()
-
-
+# Read the data from the CSV file
+csv_file_path = "large_customer_data.csv"  # Replace with the path to your CSV file
+df = load_csv_data(csv_file_path)
 
 # Simple Analytics
 st.subheader("Customer Analytics")
@@ -93,9 +70,6 @@ with col5:
 st.subheader("Customer Type Analytics by Category")
 st.dataframe(analytics_df, use_container_width=True)
 
-
-
-
 # Features and Target
 X = df[["Age", "Income"]]
 y = df["Customer_Type"]
@@ -125,25 +99,12 @@ with st.sidebar.form("prediction_form"):
         new_record = [[age, income]]
         new_prediction = knn.predict(new_record)
 
-        # Save to database
-        save_prediction_to_database(age, income, new_prediction[0])
-
         # Show success message
         st.success(f"The predicted Customer Type for Age={age} and Income={income} is: {new_prediction[0]}")
 
-        # Display the updated dataset in the sidebar
-        updated_df = read_data_from_database()
-        updated_df.rename(columns={"Customer_Type": "Actual_Customer_Type"}, inplace=True)
-        updated_df["Predicted_Customer_Type"] = knn.predict(updated_df[["Age", "Income"]])
-
-        # Save the updated dataframe in the session state so it's available globally
-        st.session_state.updated_df = updated_df
-
-# Use the updated dataframe from the session state if available
-if "updated_df" in st.session_state:
-    updated_df = st.session_state.updated_df
-else:
-    updated_df = df  # Use the original dataframe if no prediction was made yet
+        # Append the new prediction to the dataset
+        new_entry = {"Age": age, "Income": income, "Customer_Type": new_prediction[0]}
+        df = pd.concat([df, pd.DataFrame([new_entry])], ignore_index=True)
 
 # Display the main dataset with Actual and Predicted Values at the top of the page in an expander
 with st.expander("Dataset with Actual and Predicted Values"):
@@ -156,17 +117,11 @@ st.success(f"Model accuracy: {accuracy:.2f}")
 
 # Interpretation of Results (simplified)
 st.subheader("Research Interpretation")
-st.success("1. **Dataset with Actual and Predicted Values**: The dataset shows both actual and predicted customer types. The column 'Actual_Customer_Type' refers to the real values, while 'Predicted_Customer_Type' contains the model's predictions.")
+st.success("1. **Dataset with Actual and Predicted Values**: The dataset shows both actual and predicted customer types. The column 'Customer_Type' refers to the real values, while 'Predicted_Customer_Type' contains the model's predictions.")
 st.success("2. **Prediction for New Record**: The model predicts the customer type for Age=100 and Income=100,000. This prediction might not be reliable as the input is far outside the data used for training.")
 st.success(f"3. **Model Accuracy**: The model accuracy is {accuracy:.2f}, meaning it correctly predicted {accuracy * 100}% of the test data. A higher accuracy indicates a better model.")
 
 # Display tables with updated dataset after prediction in expander
 with st.expander("View Updated Dataset with Predicted Values"):
-    show_updated_data = st.multiselect('Filter: ', updated_df.columns, default=updated_df.columns.tolist(), key="updated_table_filter")
-    st.dataframe(updated_df[show_updated_data], use_container_width=True)
-
-
-
-
-
-
+    show_updated_data = st.multiselect('Filter: ', df.columns, default=df.columns.tolist(), key="updated_table_filter")
+    st.dataframe(df[show_updated_data], use_container_width=True)
