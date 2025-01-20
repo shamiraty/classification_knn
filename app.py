@@ -7,7 +7,7 @@ from numerize import numerize
 
 # Streamlit app setup
 st.set_page_config(layout="wide")
-st.title("KNN ALGORITHM AND PREDICTION WITH CSV DATA")
+st.title("KNN ALGORITHM AND PREDICTION WITH MYSQL")
 
 # Main objective
 st.subheader("Main Objective")
