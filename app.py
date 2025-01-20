@@ -8,7 +8,7 @@ from numerize import numerize
 # Streamlit app setup
 st.set_page_config(layout="wide")
 st.title("K-NEIGHBORS ALGORITHM: PREDICTION & TRENDS WITH MYSQL")
-st.warning("Predicting Future Customer Behaviors Starts Here")
+st.subheader("Predicting Future Customer Behaviors Starts Here")
 # Main objective
 st.subheader("Main Objective")
 st.markdown("""
