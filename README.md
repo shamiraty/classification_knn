@@ -13,6 +13,17 @@ You can view the live demo of this project at:
 | **SQL Statements** | Used to interact with the MySQL database to read and write customer data.                           |
 | **MySQL**      | A relational database management system used to store customer data for training and predictions.     |
 
+## Applied Domains
+
+| Role                                | Description                                                                 |
+|-------------------------------------|-----------------------------------------------------------------------------|
+| **Statisticians**                   | Professionals who apply statistical techniques to collect, analyze, and interpret data for various purposes. |
+| **Healthcare and Medicine**         | Medical professionals and researchers who use data analysis to improve patient care and medical research. |
+| **Finance and Economics**           | Experts who use data and statistical models to make financial and economic decisions. |
+| **Marketing and Customer Analytics**| Professionals who analyze consumer data to optimize marketing strategies and enhance customer experiences. |
+| **Environmental Scientist**         | Scientists who apply data analysis, modeling, and statistical methods to study environmental changes, conservation efforts, and sustainability initiatives. |
+| **Data Scientist**                  | Specialists in analyzing and interpreting complex data to provide actionable insights across various domains. |
+| **Operational Research**            | Analysts who apply advanced mathematical and statistical models to help organizations solve complex problems. |
 
 ## Main Objective
 
