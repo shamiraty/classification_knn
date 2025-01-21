@@ -2,7 +2,7 @@
 
 ## Live Demo
 You can view the live demo of this project at:  
-[**K-Nearest Neighbors Prediction & Trends**](https://k-nearest.streamlit.app/)
+[**K-Nearest Neighbors Prediction & Trends**](https://k-means-algorithm.streamlit.app/)
 
 ## Technologies
 
